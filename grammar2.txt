@@ -1,0 +1,134 @@
+# This grammar uses a convention that
+#    - terminals are lowercase          (president)
+#    - preterminals are capitalized     (Noun)
+#    - other nonterminals are all-caps  (NP)
+# 
+# This convention just makes grammars more readable to humans.  Thus:
+#
+#    - When *you* are writing grammars, you should 
+#      follow this convention unless you have a good reason not to.  
+#
+#    - But your *program* should still work with grammars that don't 
+#      follow this convention.  It should not pay any attention to
+#      upper/lower case.  From your program's point of view, 
+#      if there is at least one rule for rewriting a symbol, then
+#      that symbol is a nonterminal and should be rewritten.
+#######################
+
+# Rules for creating full sentences.
+
+1 ROOT	S Dot
+1 ROOT	S Exc
+1 ROOT	Qis S Q
+1 Dot	.
+1 Exc	!
+1 Qis	is it true that
+1 Q ?
+
+# The basic grammar rules.  Here's what the abbreviations stand for:
+#    S  = sentence
+#    NP = noun phrase
+#    VP = verb phrase
+#    PP = prepositional phrase
+#    Det = determiner (sometimes called "article")
+#    Prep = preposition
+#    Adj = adjective
+
+3 S	NP VP
+3 VP	Verb NP
+3 NP	Det Noun
+1 NP	NP PP
+1 PP	Prep NP
+5 Noun	Adj Noun
+
+# Vocabulary.  Your program can see that "ate" is a terminal
+# symbol because there exists no rule for rewriting it.
+# Any symbol that can rewrite as a terminal (or a string of 
+# terminals, like "chief of staff") is called a "preterminal."  Notice 
+# that a preterminal is a special kind of nonterminal.
+
+3 Verb	ate
+3 Verb	wanted
+3 Verb	kissed
+3 Verb	understood
+1 Verb	pickled
+
+
+1 Det	the
+1 Det	a
+1 Det	every
+
+2 Noun	president
+1 Noun	sandwich
+1 Noun	pickle
+2 Noun	chief of staff
+1 Noun	floor
+#add proposal, desk
+1 Noun	desk
+1 Noun	proposal
+
+1 Adj	fine
+1 Adj	delicious
+1 Adj	perplexed
+1 Adj	pickled
+
+1 Prep	with
+1 Prep	on
+1 Prep	under
+1 Prep	in
+
+#add and to vocab
+1 Conj	and
+
+#conjunctive phrase
+1 CVP	Conj VP
+1 VP	Verb CVP
+1 CNP	Conj NP
+1 DNP	Det Noun
+1 NP	DNP CNP
+
+#add sally
+1 PropNoun	Sally
+1 NP	PropNoun
+
+#add very
+1 Adv	very
+1 Adj	Adv Adj
+
+#add sighed
+1 EndVerb	sighed
+2 S	NP EndVerb
+
+#add thought that
+1 ThClause	that
+1 ThVerb	thought
+1 TT	ThVerb ThClause
+1 TNP	PropNoun TT
+2 TNP	DNP TT
+1 TVP	DNP Verb
+1 TVP	DNP EndVerb
+1 S	TNP TVP
+
+#add perplexed, worked
+2 Verb	perplexed
+2 PrepVerb	worked
+3 Verb	PrepVerb Prep
+
+#add that a
+1 ThStart	that
+1 TD		ThStart Det
+1 TDNP		TD Noun
+1 TDVP		TDNP VP
+1 S	TDVP VP
+
+#10 sentences 
+#Sally with a perplexed chief of staff wanted a pickle .
+#every pickled chief of staff and the desk understood every sandwich !
+#the desk and the proposal wanted every fine president !
+#Sally sighed .
+#a pickled floor thought that every delicious chief of staff worked .
+#is it true that the desk perplexed and kissed and pickled the sandwich ?
+#is it true that a desk pickled a very pickled delicious fine desk and a perplexed chief of staff ?
+#Sally thought that the pickle sighed !
+#a desk perplexed and worked on every president !
+#Sally worked with the chief of staff .
